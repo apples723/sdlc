@@ -19,7 +19,8 @@ name: PR build and deploy
 
 on:
   pull_request:
-    branches: [main]
+    # Change to your repo's default branch (e.g. main)
+    branches: [master]
 
 permissions:
   contents: read
