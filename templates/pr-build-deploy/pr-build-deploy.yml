@@ -1,0 +1,26 @@
+name: PR build and deploy
+
+on:
+  pull_request:
+    # Change to your repo's default branch (e.g. main)
+    branches: [master]
+
+permissions:
+  contents: read
+  packages: write
+
+# Runs of one pull request queue behind each other so the newest commit deploys last.
+# Not cancelling: a cancelled run could be killed between `down` and `up -d`.
+concurrency:
+  group: pr-deploy-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    # This repository has no Dockerfile and no registered self-hosted runner, so the job is
+    # skipped unless the repository variable DEPLOY_ENABLED is set to true.
+    if: vars.DEPLOY_ENABLED == 'true'
+    uses: apples723/sdlc/.github/workflows/build-deploy.yml@main
+    with:
+      compose-dir: /srv/app
+      runs-on: self-hosted

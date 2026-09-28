@@ -1,0 +1,7 @@
+# IMAGE is injected by the deploy job (ghcr.io/<owner>/<repo>:pr-<number>).
+services:
+  app:
+    image: ${IMAGE}
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
